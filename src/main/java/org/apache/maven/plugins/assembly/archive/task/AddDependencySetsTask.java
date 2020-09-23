@@ -42,6 +42,7 @@ import org.apache.maven.plugins.assembly.model.UnpackOptions;
 import org.apache.maven.plugins.assembly.utils.AssemblyFormatUtils;
 import org.apache.maven.plugins.assembly.utils.FilterUtils;
 import org.apache.maven.plugins.assembly.utils.TypeConversionUtils;
+import org.apache.maven.project.DefaultProjectBuildingRequest;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.ProjectBuilder;
 import org.apache.maven.project.ProjectBuildingException;
@@ -183,7 +184,10 @@ public class AddDependencySetsTask
 
     private ProjectBuildingRequest getProjectBuildingRequest( AssemblerConfigurationSource configSource )
     {
-        return configSource.getMavenSession().getProjectBuildingRequest();
+        ProjectBuildingRequest pbr =
+            new DefaultProjectBuildingRequest( configSource.getMavenSession().getProjectBuildingRequest() );
+        pbr.setRemoteRepositories( project.getRemoteArtifactRepositories() );
+        return pbr;
     }
 
     private boolean isUnpackWithOptions( DependencySet dependencySet )
